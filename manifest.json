@@ -1,0 +1,15 @@
+{
+  "name": "Ily@ss Fonte",
+  "short_name": "Ily@ss Fonte",
+  "description": "Carnet de musculation, rangs, anatomie et calculateurs",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#13231A",
+  "theme_color": "#13231A",
+  "icons": [
+    {"src": "icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any maskable"},
+    {"src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable"}
+  ]
+}
