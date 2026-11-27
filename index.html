@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-<script>try{var k=localStorage.getItem('fonte-skin')||'forest',e=document.documentElement;e.dataset.skin=k.indexOf('glass')===0?'glass':'forest';if(k.indexOf('-')>0)e.dataset.tone=k.split('-')[1]}catch(x){}</script>
+<script>try{var k=localStorage.getItem('fonte-skin')||'forest',e=document.documentElement;if(localStorage.getItem('fonte-nav')==='h')e.dataset.nav='h';e.dataset.skin=k.indexOf('glass')===0?'glass':'forest';if(k.indexOf('-')>0)e.dataset.tone=k.split('-')[1]}catch(x){}</script>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Ily@ss Fonte</title>
@@ -583,6 +583,49 @@ body.has-music .timer{bottom:calc(64px + 70px + env(safe-area-inset-bottom,0px))
 .gm-steps li::before{content:counter(gs);width:24px;height:24px;border-radius:50%;background:var(--accent);color:var(--accent-ink);display:grid;place-items:center;font-size:12px;font-weight:700;margin-top:1px}
 [data-skin="glass"] .gm-steps li::before{background:var(--grad);color:var(--gi,#fff)}
 .gm-card .ti{background:var(--accent)!important;color:var(--accent-ink)!important}
+
+/* ===== Barre de menu horizontale (thèmes verre / Canopy) ===== */
+[data-skin="glass"][data-nav="h"] .wrap{padding-inline-start:16px;padding-bottom:110px}
+[data-skin="glass"][data-nav="h"][data-tone="canopy"] .wrap{padding-inline-start:10px}
+[data-skin="glass"][data-nav="h"] header.top{margin-inline-start:0}
+[data-skin="glass"][data-nav="h"] nav.tabs{top:auto;bottom:calc(10px + env(safe-area-inset-bottom,0px));inset-inline-start:10px;left:10px;right:10px;width:auto;height:64px;max-height:none;padding:0 8px;border-radius:32px;overflow:visible}
+[data-skin="glass"][data-nav="h"] nav.tabs .in{flex-direction:row;justify-content:space-between;align-items:center;gap:0;height:100%;max-width:620px;margin:0 auto}
+[data-skin="glass"][data-nav="h"] nav.tabs .in::before{display:none}
+[data-skin="glass"][data-nav="h"] nav.tabs button{width:40px;height:40px;flex:none}
+[data-skin="glass"][data-nav="h"] nav.tabs .nsep{width:1px;height:26px;margin:0 2px}
+[data-skin="glass"][data-nav="h"] nav.tabs button[aria-current="page"]::after{top:auto;bottom:-9px;inset-inline-end:auto;left:50%;width:18px;height:4px;margin:0 0 0 -9px}
+@media (hover:hover){[data-skin="glass"][data-nav="h"] nav.tabs button:hover span{inset-inline-start:50%;top:auto;bottom:52px;transform:translateX(-50%)}}
+[data-skin="glass"][data-nav="h"] .mplayer{bottom:calc(84px + env(safe-area-inset-bottom,0px))}
+[data-skin="glass"][data-nav="h"] .mplayer .mrow{border-radius:18px;padding-bottom:6px;margin:0 10px}
+[data-skin="glass"][data-nav="h"] .mplayer .mseek{width:calc(100% - 40px);margin:0 20px -3px}
+[data-skin="glass"][data-nav="h"] .timer{bottom:calc(84px + env(safe-area-inset-bottom,0px))}
+[data-skin="glass"][data-nav="h"] .timer .in{padding-inline-start:16px}
+[data-skin="glass"][data-nav="h"] body.has-music .timer{bottom:calc(84px + 72px + env(safe-area-inset-bottom,0px))}
+[data-skin="glass"][data-nav="h"] body.has-music .wrap{padding-bottom:180px}
+[data-skin="glass"][data-nav="h"] body.has-music nav.tabs{max-height:none;overflow:visible}
+[data-skin="glass"][data-nav="h"][data-tone="canopy"] nav.tabs{background:var(--rail);border:0;box-shadow:0 12px 30px rgba(8,37,25,.4)}
+[data-skin="glass"][data-nav="h"] nav.tabs button[aria-current="page"]{transform:none}
+
+/* ===== Barre de musique repliable : logo flottant ===== */
+.mfold{position:relative;border:0;cursor:pointer;z-index:2;flex:none}
+.mplayer.playing .mdisc{animation:none}
+.mplayer.playing .mfold img{animation:mspin 5s linear infinite}
+.mfold .mring{position:absolute;inset:-4px;border-radius:50%;border:2px solid var(--hi);opacity:0;pointer-events:none}
+.mplayer .mrow{transition:max-width .45s cubic-bezier(.2,.8,.2,1),padding .35s,border-radius .45s,background-color .3s,box-shadow .3s;max-width:100%}
+.mplayer .mseek{transition:opacity .25s}
+.mplayer .mtitle,.mplayer .mbtn,.mplayer .mviz{transition:opacity .25s}
+.mplayer.mini{pointer-events:none}
+.mplayer.mini .mseek{opacity:0;pointer-events:none}
+.mplayer.mini .mrow{max-width:76px;min-height:76px;padding:8px!important;border-radius:50%;background:transparent!important;box-shadow:none!important;margin-inline-start:12px!important;overflow:visible}
+.mplayer.mini .mtitle,.mplayer.mini .mbtn,.mplayer.mini .mviz{opacity:0;pointer-events:none;width:0!important;min-width:0;padding:0;margin:0;overflow:hidden}
+.mplayer.mini .mfold{pointer-events:auto;width:60px!important;height:60px!important;animation:mfloat 2.6s ease-in-out infinite;box-shadow:0 10px 24px rgba(0,0,0,.35),0 0 0 3px rgba(255,255,255,.35)}
+.mplayer.mini.playing .mfold .mring{animation:mpulse 1.8s ease-out infinite}
+@keyframes mfloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+@keyframes mpulse{0%{opacity:.8;transform:scale(1)}100%{opacity:0;transform:scale(1.45)}}
+body.music-mini .wrap{padding-bottom:150px}
+body.music-mini .timer{bottom:calc(64px + 84px + env(safe-area-inset-bottom,0px))}
+[data-skin="glass"] body.music-mini .timer{bottom:calc(84px + env(safe-area-inset-bottom,0px))}
+@media (prefers-reduced-motion:reduce){.mplayer.mini .mfold,.mplayer.playing .mfold img,.mplayer.mini.playing .mfold .mring{animation:none}}
 </style>
 </head>
 <body>
@@ -610,7 +653,7 @@ body.has-music .timer{bottom:calc(64px + 70px + env(safe-area-inset-bottom,0px))
   <input type="range" class="mseek" id="mSeek" min="0" max="1000" value="0" aria-label="Position">
   <div class="mrow">
     <canvas id="mViz" class="mviz" width="800" height="120" aria-hidden="true"></canvas>
-    <button class="mtitle" data-act="mOpen"><span class="mdisc mlogo"><img id="mLogo" alt="Ily@ss Fonte"></span><span class="mtxt"><i class="mbrand">Ily@ss Fonte</i><b id="mName"></b><small id="mTime">0:00</small></span></button>
+    <button class="mdisc mlogo mfold" data-act="mCollapse" id="mFoldBtn" aria-label="Ily@ss Fonte"><img id="mLogo" alt="Ily@ss Fonte"><i class="mring"></i></button><button class="mtitle" data-act="mOpen"><span class="mtxt"><i class="mbrand">Ily@ss Fonte</i><b id="mName"></b><small id="mTime">0:00</small></span></button>
     <button class="mbtn msvc sp" data-act="svc" data-s="sp" aria-label="Spotify"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="11" fill="currentColor"/><path d="M6.5 9.2c3.6-1 7.9-.7 11 1.1M7.2 12.4c3-.8 6.4-.5 9 1M7.9 15.4c2.4-.6 4.9-.4 7 .8" fill="none" stroke="#0b0b0b" stroke-width="1.7" stroke-linecap="round"/></svg></button>
     <button class="mbtn msvc sc" data-act="svc" data-s="sc" aria-label="SoundCloud"><svg viewBox="0 0 24 24"><path fill="currentColor" d="M10 8.2v8.8h8.2a3.3 3.3 0 0 0 .3-6.6A4.6 4.6 0 0 0 10 8.2z"/><path d="M2.5 13v3.5M4.5 11.5v5.5M6.5 10.5v6.5M8.3 9.5v7.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg></button>
     <button class="mbtn msvc yt" data-act="svc" data-s="yt" aria-label="YouTube"><svg viewBox="0 0 24 24"><rect x="1.5" y="5" width="21" height="14" rx="4.5" fill="currentColor"/><path d="M10 9.2v5.6l5-2.8z" fill="#fff"/></svg></button>
@@ -888,6 +931,12 @@ I18N_X.fr.skin='Thème';I18N_X.fr.skins=['Vert forêt','Verre rose et lavande','
 Object.assign(I18N_X.fr,{sp_types:{playlist:'Playlist Spotify',album:'Album Spotify',track:'Morceau Spotify',artist:'Artiste Spotify',episode:'Épisode Spotify',show:'Podcast Spotify'},yt_pl:'Playlist YouTube',yt_vid:'Vidéo YouTube',sp_tip:'La liste des titres s’affiche dans le lecteur : faites-la défiler et touchez un titre pour l’écouter. Pour les morceaux en entier, connectez-vous une fois sur open.spotify.com dans Chrome ; sinon Spotify joue des extraits de 30 secondes.',yt_tip:'Pour une playlist, touchez l’icône de liste en haut à droite de la vidéo : tous les titres s’affichent et vous pouvez choisir celui à lire.'});
 Object.assign(I18N_X.en,{sp_types:{playlist:'Spotify playlist',album:'Spotify album',track:'Spotify track',artist:'Spotify artist',episode:'Spotify episode',show:'Spotify podcast'},yt_pl:'YouTube playlist',yt_vid:'YouTube video',sp_tip:'The track list appears in the player: scroll it and tap a track to play it. For full tracks, log in once at open.spotify.com in Chrome; otherwise Spotify plays 30-second previews.',yt_tip:'For a playlist, tap the list icon at the top right of the video: all titles appear and you can pick the one to play.'});
 Object.assign(I18N_X.ar,{sp_types:{playlist:'قائمة Spotify',album:'ألبوم Spotify',track:'مقطع Spotify',artist:'فنان Spotify',episode:'حلقة Spotify',show:'بودكاست Spotify'},yt_pl:'قائمة YouTube',yt_vid:'فيديو YouTube',sp_tip:'تظهر قائمة المقاطع داخل المشغّل: مرّرها واضغط على مقطع لتشغيله. لسماع المقاطع كاملة، سجّل الدخول مرة واحدة في open.spotify.com على Chrome، وإلا يشغّل Spotify مقتطفات من 30 ثانية.',yt_tip:'في قائمة التشغيل، اضغط على أيقونة القائمة أعلى يمين الفيديو: تظهر كل العناوين وتختار ما تريد تشغيله.'});
+Object.assign(I18N_X.fr,{m_collapse:'Réduire la barre de musique',m_expand:'Agrandir la barre de musique'});
+Object.assign(I18N_X.en,{m_collapse:'Collapse the music bar',m_expand:'Expand the music bar'});
+Object.assign(I18N_X.ar,{m_collapse:'تصغير بار الموسيقى',m_expand:'تكبير بار الموسيقى'});
+Object.assign(I18N_X.fr,{nav_lbl:'Barre de menu',navs:['Verticale (sur le côté)','Horizontale (en bas)'],nav_note:'S’applique aux thèmes verre et Canopy.'});
+Object.assign(I18N_X.en,{nav_lbl:'Menu bar',navs:['Vertical (on the side)','Horizontal (at the bottom)'],nav_note:'Applies to the glass and Canopy themes.'});
+Object.assign(I18N_X.ar,{nav_lbl:'شريط القائمة',navs:['عمودي (على الجانب)','أفقي (في الأسفل)'],nav_note:'يُطبَّق على الثيمات الزجاجية وكانوبي.'});
 Object.assign(I18N_X.fr,{sc_loading:'Chargement de la playlist SoundCloud…',sc_err_t:'Ce lien court ne peut pas être lu ici',sc_err:'Ouvrez-le avec le bouton ci-dessous, puis copiez l’adresse complète affichée dans le navigateur (soundcloud.com/…/sets/…) et collez-la dans le champ ci-dessus. La liste s’affichera alors ici.',sc_retry:'Réessayer'});
 Object.assign(I18N_X.en,{sc_loading:'Loading SoundCloud playlist…',sc_err_t:'This short link can’t be played here',sc_err:'Open it with the button below, copy the full address shown in the browser (soundcloud.com/…/sets/…) and paste it in the field above. The list will then appear here.',sc_retry:'Try again'});
 Object.assign(I18N_X.ar,{sc_loading:'جارٍ تحميل قائمة SoundCloud…',sc_err_t:'لا يمكن تشغيل هذا الرابط المختصر هنا',sc_err:'افتحه بالزر أدناه، ثم انسخ العنوان الكامل الظاهر في المتصفح (soundcloud.com/…/sets/…) والصقه في الخانة أعلاه، فتظهر القائمة هنا.',sc_retry:'إعادة المحاولة'});
@@ -1471,6 +1520,7 @@ function rankPill(r){return '<span class="rkpill lg rk-'+r.cls+'">'+esc(r.starte
 
 /* ---------- Langue ---------- */
 const SKINS=['forest','glass','glass-green','glass-red','glass-yellow','glass-canopy'];
+function setNav(v){const el=document.documentElement;if(v==='h')el.dataset.nav='h';else delete el.dataset.nav;try{localStorage.setItem('fonte-nav',v==='h'?'h':'v')}catch(e){}}
 function setSkin(k){if(!SKINS.includes(k))k='forest';const el=document.documentElement,g=k.indexOf('glass')===0;el.dataset.skin=g?'glass':'forest';const tn=k.split('-')[1];if(tn)el.dataset.tone=tn;else delete el.dataset.tone;try{localStorage.setItem('fonte-skin',k)}catch(e){}
   const m=document.querySelector('meta[name="theme-color"]');if(m)m.setAttribute('content',{forest:'#13231A',glass:'#f1f0fa','glass-green':'#eefaf2','glass-red':'#fff1f2','glass-yellow':'#fffbea','glass-canopy':'#17603f'}[k])}
 function applyLang(){
@@ -1860,7 +1910,7 @@ function exDetail(id,fromPick){
   openDlg(h);
 }
 function profileDlg(){
-  openDlg('<div class="row between"><h2 style="margin:0">'+t('profile')+'</h2><button class="icon-btn" data-act="close" aria-label="'+esc(t('close'))+'">✕</button></div><div class="panel stack" style="margin-top:12px"><div><label class="f" for="pLang">'+t('language')+'</label><select id="pLang">'+Object.keys(LOCS).map(l=>'<option value="'+l+'"'+(l===LANG?' selected':'')+'>'+LNAMES[l]+'</option>').join('')+'</select></div><div><label class="f" for="pSkin">'+t('skin')+'</label><select id="pSkin">'+SKINS.map((k,i)=>'<option value="'+k+'"'+((S.profile.skin||localStorage.getItem('fonte-skin')||'forest')===k?' selected':'')+'>'+esc(t('skins')[i])+'</option>').join('')+'</select></div><div><label class="f" for="pEnv">'+t('env_label')+'</label><select id="pEnv">'+Object.keys(ENV).map(k=>'<option value="'+k+'"'+(S.profile.env===k?' selected':'')+'>'+esc(L3(ENV[k].n))+'</option>').join('')+'</select></div><div><label class="f" for="pPoids">'+t('body_weight')+'</label><input type="number" id="pPoids" inputmode="decimal" step="0.5" min="30" max="250" value="'+esc(S.profile.poids)+'"></div><div><label class="f" for="pBar">'+t('scale')+'</label><select id="pBar"><option value="h"'+(S.profile.bareme==='h'?' selected':'')+'>'+t('man')+'</option><option value="f"'+(S.profile.bareme==='f'?' selected':'')+'>'+t('woman')+'</option></select></div><button class="btn primary block" data-act="saveProfile">'+t('save')+'</button></div><p class="muted small">'+(store.mode==='db'?t('stored_db'):t('stored_local'))+'</p>');
+  openDlg('<div class="row between"><h2 style="margin:0">'+t('profile')+'</h2><button class="icon-btn" data-act="close" aria-label="'+esc(t('close'))+'">✕</button></div><div class="panel stack" style="margin-top:12px"><div><label class="f" for="pLang">'+t('language')+'</label><select id="pLang">'+Object.keys(LOCS).map(l=>'<option value="'+l+'"'+(l===LANG?' selected':'')+'>'+LNAMES[l]+'</option>').join('')+'</select></div><div><label class="f" for="pSkin">'+t('skin')+'</label><select id="pSkin">'+SKINS.map((k,i)=>'<option value="'+k+'"'+((S.profile.skin||localStorage.getItem('fonte-skin')||'forest')===k?' selected':'')+'>'+esc(t('skins')[i])+'</option>').join('')+'</select></div><div><label class="f" for="pNav">'+t('nav_lbl')+'</label><select id="pNav">'+['v','h'].map((v,i)=>'<option value="'+v+'"'+((S.profile.nav||(document.documentElement.dataset.nav==='h'?'h':'v'))===v?' selected':'')+'>'+esc(t('navs')[i])+'</option>').join('')+'</select><div class="muted" style="font-size:12px;margin-top:4px">'+t('nav_note')+'</div></div><div><label class="f" for="pEnv">'+t('env_label')+'</label><select id="pEnv">'+Object.keys(ENV).map(k=>'<option value="'+k+'"'+(S.profile.env===k?' selected':'')+'>'+esc(L3(ENV[k].n))+'</option>').join('')+'</select></div><div><label class="f" for="pPoids">'+t('body_weight')+'</label><input type="number" id="pPoids" inputmode="decimal" step="0.5" min="30" max="250" value="'+esc(S.profile.poids)+'"></div><div><label class="f" for="pBar">'+t('scale')+'</label><select id="pBar"><option value="h"'+(S.profile.bareme==='h'?' selected':'')+'>'+t('man')+'</option><option value="f"'+(S.profile.bareme==='f'?' selected':'')+'>'+t('woman')+'</option></select></div><button class="btn primary block" data-act="saveProfile">'+t('save')+'</button></div><p class="muted small">'+(store.mode==='db'?t('stored_db'):t('stored_local'))+'</p>');
 }
 function finishDlg(prs,ranksUp){
   let h='<div style="text-align:center;padding-top:6px"><h2>'+t('w_saved')+'</h2>';
@@ -1891,12 +1941,13 @@ document.addEventListener('click',async e=>{
     case 'langDlg':langDlg();break;
     case 'setLang':dlg.close();setLang(el.dataset.l,true);break;
     case 'close':dlg.close();break;
-    case 'saveProfile':{const p=parseFloat($('#pPoids').value);if(!(p>=30&&p<=250)){toast(t('weight_range'));return}S.profile.poids=p;S.profile.bareme=$('#pBar').value;S.profile.env=$('#pEnv').value;S.profile.skin=$('#pSkin').value;setSkin(S.profile.skin);const l=$('#pLang').value;S.profile.lang=l;saveProfile();dlg.close();if(l!==LANG)setLang(l,false);else render();toast(t('profile_saved'));break}
+    case 'saveProfile':{const p=parseFloat($('#pPoids').value);if(!(p>=30&&p<=250)){toast(t('weight_range'));return}S.profile.poids=p;S.profile.bareme=$('#pBar').value;S.profile.env=$('#pEnv').value;S.profile.skin=$('#pSkin').value;setSkin(S.profile.skin);S.profile.nav=$('#pNav').value;setNav(S.profile.nav);const l=$('#pLang').value;S.profile.lang=l;saveProfile();dlg.close();if(l!==LANG)setLang(l,false);else render();toast(t('profile_saved'));break}
     case 'newWorkout':newDraft();break;
     case 'tool':openTool(el.dataset.t);break;
     case 'manual':openDlg(manualHTML());break;
     case 'gmGo':{const sec=document.getElementById('gm'+el.dataset.i);if(sec)sec.scrollIntoView({behavior:'smooth',block:'start'});break}
     case 'mOpen':openDlg(musicHTML());break;
+    case 'mCollapse':MUS.min=!MUS.min;try{localStorage.setItem('fonte-mmin',MUS.min?'1':'0')}catch(e){}mUI();break;
     case 'mAdd':$('#mFile').click();break;
     case 'mPlay':mToggle();break;
     case 'mPrev':mPrev();break;
@@ -2020,7 +2071,7 @@ async function generate(){
 
 
 /* ---------- Lecteur de musique locale (MP3) ---------- */
-const MUS={list:[],i:-1,shuffle:false,rep:'all',folder:'all',qf:'all',view:'list'};
+const MUS={list:[],i:-1,shuffle:false,rep:'all',folder:'all',qf:'all',view:'list',min:(()=>{try{return localStorage.getItem('fonte-mmin')==='1'}catch(e){return false}})()};
 const PLAY_I='<svg viewBox="0 0 24 24"><path d="M7 4l13 8-13 8z" fill="currentColor"/></svg>',PAUSE_I='<svg viewBox="0 0 24 24"><path d="M6 4h4v16H6zM14 4h4v16h-4z" fill="currentColor"/></svg>';
 const aud=document.getElementById('aud');
 let mdb=null;
@@ -2028,7 +2079,7 @@ function midb(){return new Promise(res=>{if(mdb)return res(mdb);try{const r=inde
 async function mStore(op,val){const db=await midb();if(!db)return null;return new Promise(res=>{try{const tx=db.transaction('tracks',op==='all'?'readonly':'readwrite'),st=tx.objectStore('tracks');const r=op==='all'?st.getAll():op==='put'?st.put(val):op==='del'?st.delete(val):st.clear();r.onsuccess=()=>res(r.result);r.onerror=()=>res(null)}catch(e){res(null)}})}
 async function mLoad(){const all=await mStore('all');if(all&&all.length){all.sort((a,b)=>a.ord-b.ord).forEach(t=>MUS.list.push({id:t.id,name:t.name,ord:t.ord,folder:t.folder||'',url:URL.createObjectURL(t.blob)}));MUS.i=0;aud.src=MUS.list[0].url;mUI()}}
 function mFmt(sec){sec=Math.max(0,Math.floor(sec||0));return Math.floor(sec/60)+':'+String(sec%60).padStart(2,'0')}
-function mUI(){const bar=$('#mbar'),has=MUS.list.length>0;bar.hidden=!has;document.body.classList.toggle('has-music',has);
+function mUI(){const bar=$('#mbar'),has=MUS.list.length>0;bar.hidden=!has;document.body.classList.toggle('has-music',has);bar.classList.toggle('mini',MUS.min);document.body.classList.toggle('music-mini',has&&MUS.min);{const fb=$('#mFoldBtn');if(fb)fb.setAttribute('aria-label',t(MUS.min?'m_expand':'m_collapse'))}
   const tr=MUS.list[MUS.i];$('#mName').textContent=tr?tr.name:t('m_nothing');$('#mPlayBtn').innerHTML=aud.paused?PLAY_I:PAUSE_I;bar.classList.toggle('playing',!aud.paused);
   const l=$('#mList');if(l)l.innerHTML=mListHTML();const nw=$('#mNow');if(nw)nw.innerHTML=mNowHTML();document.querySelectorAll('.mseg button').forEach(b=>{b.setAttribute('aria-pressed',(b.dataset.v==='dirs')===(MUS.view==='dirs'));b.querySelector('span').textContent=b.dataset.v==='dirs'?Object.keys(mFolders()).length:MUS.list.length});const ct=$('#mCtl');if(ct)ct.innerHTML=mCtlHTML();
   if('mediaSession' in navigator&&tr){try{navigator.mediaSession.metadata=new MediaMetadata({title:tr.name,artist:'Ily@ss Fonte'})}catch(e){}}}
@@ -2213,7 +2264,7 @@ function manualHTML(){
 /* ---------- Démarrage ---------- */
 applyLang();
 render();
-store.init().then(()=>{if(S.profile.skin)setSkin(S.profile.skin);if(S.profile.lang&&LOCS[S.profile.lang]&&S.profile.lang!==LANG){LANG=S.profile.lang;try{localStorage.setItem('fonte-lang',LANG)}catch(e){}applyLang()}render()});
+store.init().then(()=>{if(S.profile.skin)setSkin(S.profile.skin);if(S.profile.nav)setNav(S.profile.nav);if(S.profile.lang&&LOCS[S.profile.lang]&&S.profile.lang!==LANG){LANG=S.profile.lang;try{localStorage.setItem('fonte-lang',LANG)}catch(e){}applyLang()}render()});
 </script>
 <script>
 if('serviceWorker' in navigator&&location.protocol.indexOf('http')===0){window.addEventListener('load',()=>navigator.serviceWorker.register('sw.js').catch(()=>{}))}
