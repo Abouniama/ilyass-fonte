@@ -552,6 +552,8 @@ body.has-music .timer{bottom:calc(64px + 70px + env(safe-area-inset-bottom,0px))
 .svchead .svclogo svg{width:44px;height:44px;display:block}
 .svchead .btn{padding:9px 12px;white-space:nowrap}
 .svcplayer{margin-top:12px}
+.sc-load{padding:40px 12px;text-align:center;border-radius:14px;background:var(--surface2);color:var(--muted);font-size:14px}
+.sc-load::before{content:'';display:block;width:28px;height:28px;margin:0 auto 10px;border-radius:50%;border:3px solid color-mix(in srgb,#ff5500 25%,transparent);border-top-color:#ff5500;animation:mspin 1s linear infinite}
 .sc-tip{margin:0 0 8px;padding:10px 12px;border-radius:14px;background:color-mix(in srgb,var(--brand,#ff5500) 14%,var(--surface));border:1px solid color-mix(in srgb,var(--brand,#ff5500) 35%,transparent)}
 .svcplayer iframe{width:100%;border:0;border-radius:14px;display:block;background:var(--surface2)}
 .svcmini{width:28px;flex:none;display:grid;place-items:center}
@@ -886,6 +888,9 @@ I18N_X.fr.skin='Thème';I18N_X.fr.skins=['Vert forêt','Verre rose et lavande','
 Object.assign(I18N_X.fr,{sp_types:{playlist:'Playlist Spotify',album:'Album Spotify',track:'Morceau Spotify',artist:'Artiste Spotify',episode:'Épisode Spotify',show:'Podcast Spotify'},yt_pl:'Playlist YouTube',yt_vid:'Vidéo YouTube',sp_tip:'La liste des titres s’affiche dans le lecteur : faites-la défiler et touchez un titre pour l’écouter. Pour les morceaux en entier, connectez-vous une fois sur open.spotify.com dans Chrome ; sinon Spotify joue des extraits de 30 secondes.',yt_tip:'Pour une playlist, touchez l’icône de liste en haut à droite de la vidéo : tous les titres s’affichent et vous pouvez choisir celui à lire.'});
 Object.assign(I18N_X.en,{sp_types:{playlist:'Spotify playlist',album:'Spotify album',track:'Spotify track',artist:'Spotify artist',episode:'Spotify episode',show:'Spotify podcast'},yt_pl:'YouTube playlist',yt_vid:'YouTube video',sp_tip:'The track list appears in the player: scroll it and tap a track to play it. For full tracks, log in once at open.spotify.com in Chrome; otherwise Spotify plays 30-second previews.',yt_tip:'For a playlist, tap the list icon at the top right of the video: all titles appear and you can pick the one to play.'});
 Object.assign(I18N_X.ar,{sp_types:{playlist:'قائمة Spotify',album:'ألبوم Spotify',track:'مقطع Spotify',artist:'فنان Spotify',episode:'حلقة Spotify',show:'بودكاست Spotify'},yt_pl:'قائمة YouTube',yt_vid:'فيديو YouTube',sp_tip:'تظهر قائمة المقاطع داخل المشغّل: مرّرها واضغط على مقطع لتشغيله. لسماع المقاطع كاملة، سجّل الدخول مرة واحدة في open.spotify.com على Chrome، وإلا يشغّل Spotify مقتطفات من 30 ثانية.',yt_tip:'في قائمة التشغيل، اضغط على أيقونة القائمة أعلى يمين الفيديو: تظهر كل العناوين وتختار ما تريد تشغيله.'});
+Object.assign(I18N_X.fr,{sc_loading:'Chargement de la playlist SoundCloud…',sc_err_t:'Ce lien court ne peut pas être lu ici',sc_err:'Ouvrez-le avec le bouton ci-dessous, puis copiez l’adresse complète affichée dans le navigateur (soundcloud.com/…/sets/…) et collez-la dans le champ ci-dessus. La liste s’affichera alors ici.',sc_retry:'Réessayer'});
+Object.assign(I18N_X.en,{sc_loading:'Loading SoundCloud playlist…',sc_err_t:'This short link can’t be played here',sc_err:'Open it with the button below, copy the full address shown in the browser (soundcloud.com/…/sets/…) and paste it in the field above. The list will then appear here.',sc_retry:'Try again'});
+Object.assign(I18N_X.ar,{sc_loading:'جارٍ تحميل قائمة SoundCloud…',sc_err_t:'لا يمكن تشغيل هذا الرابط المختصر هنا',sc_err:'افتحه بالزر أدناه، ثم انسخ العنوان الكامل الظاهر في المتصفح (soundcloud.com/…/sets/…) والصقه في الخانة أعلاه، فتظهر القائمة هنا.',sc_retry:'إعادة المحاولة'});
 Object.assign(I18N_X.fr,{sc_short:'Ma playlist SoundCloud',sc_tip:'Sur téléphone, SoundCloud affiche d’abord « Listen in browser » : touchez-le une fois et la liste des morceaux s’affiche ici. Faites défiler le lecteur pour la parcourir.'});
 Object.assign(I18N_X.en,{sc_short:'My SoundCloud playlist',sc_tip:'On phones, SoundCloud first shows “Listen in browser”: tap it once and the track list appears here. Scroll inside the player to browse it.'});
 Object.assign(I18N_X.ar,{sc_short:'قائمتي على SoundCloud',sc_tip:'على الهاتف يعرض SoundCloud أولاً زر «Listen in browser»: اضغط عليه مرة واحدة فتظهر قائمة المقاطع هنا. مرّر داخل المشغّل لتصفحها.'});
@@ -1901,10 +1906,11 @@ document.addEventListener('click',async e=>{
     case 'mFold':MUS.folder=el.dataset.f;mUI();break;
     case 'mBack':MUS.folder='all';mUI();break;
     case 'svc':openDlg(svcHTML(el.dataset.s));break;
+    case 'scRetry':{const c=svcCur.sc;if(c){c.err=false;c.pending=false;openDlg(svcHTML('sc'))}break}
     case 'svcHome':window.open(SVC[el.dataset.s].home,'_blank','noopener');break;
     case 'svcOpen':window.open(el.dataset.u,'_blank','noopener');break;
-    case 'svcAdd':{const k=el.dataset.s,p=svcParse(k,$('#svcIn').value);if(!p){toast(t('svc_bad',SVC[k].name));return}
-      if(!SVL[k].some(x=>x.url===p.url))SVL[k].unshift(p);svcSave();svcCur[k]=p;if(p.embed)aud.pause();openDlg(svcHTML(k));break}
+    case 'svcAdd':{const k=el.dataset.s;let p=svcParse(k,$('#svcIn').value);if(!p){toast(t('svc_bad',SVC[k].name));return}
+      if(!SVL[k].some(x=>x.url===p.url))SVL[k].unshift(p);else p=SVL[k].find(x=>x.url===p.url);svcSave();svcCur[k]=p;if(k==='sc'&&!p.res&&!p.title&&!/on\.soundcloud\.com/.test(p.url)&&!p.pending){p.pending=true;scResolve(p)}if(p.embed)aud.pause();openDlg(svcHTML(k));break}
     case 'svcPlay':{const k=el.dataset.s,x=SVL[k][+el.dataset.i];svcCur[k]=x;if(x.embed)aud.pause();else window.open(x.url,'_blank','noopener');openDlg(svcHTML(k));break}
     case 'svcDel':{const k=el.dataset.s,i=+el.dataset.i;if(svcCur[k]&&svcCur[k].url===SVL[k][i].url)svcCur[k]=null;SVL[k].splice(i,1);svcSave();openDlg(svcHTML(k));break}
     case 'eqToggle':EQS.on=!EQS.on;if(EQS.on){eqInit();if(actx&&actx.state!=='running')actx.resume()}eqApply();eqSave();$('#mEq').innerHTML=eqHTML();break;
@@ -2095,9 +2101,9 @@ aud.addEventListener('play',()=>{if(EQS.on)eqInit();if(actx&&actx.state!=='runni
 const SVC={sp:{name:'Spotify',home:'https://open.spotify.com',icon:'<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="11" fill="currentColor"/><path d="M6.5 9.2c3.6-1 7.9-.7 11 1.1M7.2 12.4c3-.8 6.4-.5 9 1M7.9 15.4c2.4-.6 4.9-.4 7 .8" fill="none" stroke="#0b0b0b" stroke-width="1.7" stroke-linecap="round"/></svg>',h:380},yt:{name:'YouTube',home:'https://www.youtube.com',icon:'<svg viewBox="0 0 24 24"><rect x="1.5" y="5" width="21" height="14" rx="4.5" fill="currentColor"/><path d="M10 9.2v5.6l5-2.8z" fill="#fff"/></svg>',h:0},sc:{name:'SoundCloud',home:'https://soundcloud.com',icon:'<svg viewBox="0 0 24 24"><path fill="currentColor" d="M10 8.2v8.8h8.2a3.3 3.3 0 0 0 .3-6.6A4.6 4.6 0 0 0 10 8.2z"/><path d="M2.5 13v3.5M4.5 11.5v5.5M6.5 10.5v6.5M8.3 9.5v7.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>',h:440}};
 let SVL=(()=>{try{return Object.assign({sp:[],sc:[],yt:[]},JSON.parse(localStorage.getItem('fonte-svc')||'{}'))}catch(e){return {sp:[],sc:[],yt:[]}}})();
 let svcCur={sp:null,sc:null,yt:null};
-const svcSave=()=>{try{localStorage.setItem('fonte-svc',JSON.stringify(SVL))}catch(e){}};
+const svcSave=()=>{try{localStorage.setItem('fonte-svc',JSON.stringify(SVL,(k,v)=>k==='pending'?undefined:v))}catch(e){}};
 const spName=(ty,id)=>((t('sp_types')||{})[ty]||'Spotify')+' #'+String(id).slice(0,4);
-const svcLabel=(k,x)=>{const p=svcParse(k,x.url);return p&&p.label?p.label:x.label};
+const svcLabel=(k,x)=>{if(x.title)return x.title;const p=svcParse(k,x.url);return p&&p.label?p.label:x.label};
 function svcParse(k,raw){raw=(raw||'').trim();
   if(k==='yt'){try{const u=new URL(raw);if(!/(^|\.)(youtube\.com|youtu\.be|youtube-nocookie\.com)$/.test(u.hostname))return null;
     let id=null,list=u.searchParams.get('list');if(/youtu\.be$/.test(u.hostname))id=u.pathname.slice(1).split('/')[0];else if(u.pathname==='/watch')id=u.searchParams.get('v');else{const m=u.pathname.match(/\/(shorts|embed|live)\/([\w-]{6,})/);if(m)id=m[2]}
@@ -2109,10 +2115,24 @@ function svcParse(k,raw){raw=(raw||'').trim();
       return {url:u.href,embed:m?'https://open.spotify.com/embed/'+m[1]+'/'+m[2]+'?theme=0':null,label:m?spName(m[1],m[2]):'Spotify'}}catch(e){return null}}
   try{const u=new URL(raw);if(!/(^|\.)soundcloud\.com$/.test(u.hostname))return null;const parts=u.pathname.split('/').filter(Boolean);
     return {url:u.href,embed:'https://w.soundcloud.com/player/?url='+encodeURIComponent(u.href)+'&color=%23ff5500&auto_play=false&visual=false&show_comments=false&hide_related=true&show_teaser=false&show_reposts=false&show_user=true&sharing=false&buying=false&download=false',label:/^on\.soundcloud\.com$/.test(u.hostname)?t('sc_short'):(parts.slice(-1)[0]||'soundcloud')}}catch(e){return null}}
+let svcOpenK=null;
+const SC_P='&color=%23ff5500&auto_play=false&visual=false&show_comments=false&hide_related=true&show_teaser=false&show_reposts=false&show_user=true&sharing=false&buying=false&download=false';
+async function scResolve(x){
+  try{const r=await fetch('https://soundcloud.com/oembed?format=json&maxheight=440&url='+encodeURIComponent(x.url));if(!r.ok)throw 0;const j=await r.json();
+    const m=String(j.html||'').match(/src="([^"]+)"/);if(!m)throw 0;let src=m[1].replace(/&amp;/g,'&');
+    const u=new URL(src);if(u.hostname!=='w.soundcloud.com')throw 0;const inner=u.searchParams.get('url');if(!inner)throw 0;
+    x.res='https://w.soundcloud.com/player/?url='+encodeURIComponent(inner)+SC_P;if(j.title)x.title=String(j.title).slice(0,80);x.err=false}
+  catch(e){x.err=true}
+  x.pending=false;svcSave();if(dlg.open&&svcOpenK==='sc')openDlg(svcHTML('sc'))}
 function svcHTML(k){const S2=SVC[k],cur=svcCur[k];
   let h=dlgHead(S2.name)+'<div class="svchead '+k+'"><span class="svclogo">'+S2.icon+'</span><div style="flex:1;min-width:0"><b>'+S2.name+'</b><div class="small" style="opacity:.8">'+t('svc_sub')+'</div></div><button class="btn" data-act="svcHome" data-s="'+k+'">'+esc(t('svc_home',S2.name))+' ↗</button></div>';
   h+='<div class="panel stack" style="margin-top:12px"><label class="f" for="svcIn">'+t('svc_paste')+'</label><div class="row"><input type="text" id="svcIn" inputmode="url" placeholder="'+({sp:'https://open.spotify.com/playlist/…',sc:'https://soundcloud.com/…',yt:'https://youtube.com/watch?v=…'}[k])+'"><button class="btn primary" data-act="svcAdd" data-s="'+k+'">'+t('svc_add')+'</button></div></div>';
-  if(cur&&cur.embed)h+='<div class="svcplayer">'+'<p class="small sc-tip '+k+'">'+t(k+'_tip')+'</p>'+'<iframe class="'+(k==='yt'?'yt169':'')+'" src="'+esc((svcParse(k,cur.url)||cur).embed)+'" height="'+(S2.h||200)+'" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy" title="'+S2.name+'"></iframe><p class="muted small" style="margin:6px 0 0">'+t('svc_fallback')+' <button class="btn ghost" style="padding:2px 6px;color:var(--accent)" data-act="svcOpen" data-s="'+k+'" data-u="'+esc(cur.url)+'">'+t('svc_open')+' ↗</button></p></div>';
+  svcOpenK=k;
+  let emb=cur?(svcParse(k,cur.url)||cur).embed:null;
+  if(k==='sc'&&cur){const short=/(^|\/\/)on\.soundcloud\.com/.test(cur.url);if(cur.res)emb=cur.res;else if(short){emb=null;
+    if(cur.err)h+='<div class="svcplayer"><div class="sc-tip sc small"><b>'+t('sc_err_t')+'</b><br>'+t('sc_err')+'</div><button class="btn primary block" data-act="svcOpen" data-s="sc" data-u="'+esc(cur.url)+'">'+t('svc_open')+' ↗</button><button class="btn block" data-act="scRetry" style="margin-top:8px">'+t('sc_retry')+'</button></div>';
+    else{h+='<div class="svcplayer"><div class="sc-load">'+t('sc_loading')+'</div></div>';if(!cur.pending){cur.pending=true;scResolve(cur)}}}}
+  if(cur&&emb)h+='<div class="svcplayer">'+'<p class="small sc-tip '+k+'">'+t(k+'_tip')+'</p>'+'<iframe class="'+(k==='yt'?'yt169':'')+'" src="'+esc(emb)+'" height="'+(S2.h||200)+'" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy" title="'+S2.name+'"></iframe><p class="muted small" style="margin:6px 0 0">'+t('svc_fallback')+' <button class="btn ghost" style="padding:2px 6px;color:var(--accent)" data-act="svcOpen" data-s="'+k+'" data-u="'+esc(cur.url)+'">'+t('svc_open')+' ↗</button></p></div>';
   const L=SVL[k];
   h+='<h3 style="margin:16px 0 8px">'+t('svc_saved')+'</h3><div class="panel" style="padding:6px">'+(L.length?L.map((x,i)=>'<div class="mli'+(cur&&cur.url===x.url?' cur':'')+'"><button class="mlp" data-act="svcPlay" data-s="'+k+'" data-i="'+i+'"><span class="svcmini '+k+'">'+S2.icon+'</span><span class="mnm"><b>'+esc(svcLabel(k,x))+'</b><small>'+esc(x.url.replace(/^https?:\/\//,'').slice(0,46))+'</small></span></button><button class="icon-btn mx" data-act="svcOpen" data-s="'+k+'" data-u="'+esc(x.url)+'" aria-label="'+esc(t('svc_open'))+'">↗</button><button class="icon-btn mx" data-act="svcDel" data-s="'+k+'" data-i="'+i+'" aria-label="'+esc(t('del'))+'">✕</button></div>').join(''):'<p class="muted small" style="margin:8px">'+t('svc_none')+'</p>')+'</div>';
   return h+'<p class="muted small" style="margin-top:10px">'+t('svc_note')+'</p>'}
